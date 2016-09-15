@@ -49,7 +49,7 @@
         <p class="lead"> You're craving that awesome crepe with mushroom sauce you had last night, but it's closed on Sundays. <br> Where should you go to eat?</p>
       </div>
       <table class="table table-hover"> 
-        <tr><th>index</th><th>Menu Item</th><th>Item Description</th></th>Restaurant Name</th></th>Price</th></tr> 
+        <tr><th>index</th><th>Menu Item</th><th>Item Description</th><th>Restaurant Name</th><th>Price</th></tr> 
         {% for rest in rests %} 
         <tr><td>{{ rest['index'] }}</td><td>{{ rest['menu_item']}}</td><td>{{ rest['desc'] }}</td><td>{{ rest['name'] }}</td><td>{{ rest['price'] }}</td></tr> 
         {% endfor %} 

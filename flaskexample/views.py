@@ -106,7 +106,7 @@ def cesareans_output():
   food = request.args.get('menu_item')
     #just select the Cesareans  from the birth dtabase for the month that the user inputs
   #query = "SELECT index, attendant, birth_month FROM birth_data_table WHERE delivery_method='Cesarean' AND birth_month='%s'" % food
-  query = "SELECT * FROM rest_table WHERE index=600"
+  query = """ SELECT * FROM rest_table """
   print query
   query_results=pd.read_sql_query(query,con)
   print query_results

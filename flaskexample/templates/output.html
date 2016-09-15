@@ -79,7 +79,7 @@
 <!--      {% endfor %}-->
 <!--      </table>-->
 	<table class="table table-hover"> 
-        <tr><th>index</th><th>Menu Item</th><th>Item Description</th></th>Restaurant Name</th></th>Price</th></tr> 
+        <tr><th>index</th><th>Menu Item</th><th>Item Description</th><th>Restaurant Name</th><th>Price</th></tr> 
         {% for rest in rests %} 
         <tr><td>{{ rest['index'] }}</td><td>{{ rest['menu_item']}}</td><td>{{ rest['desc'] }}</td><td>{{ rest['name'] }}</td><td>{{ rest['price'] }}</td></tr> 
         {% endfor %} 
