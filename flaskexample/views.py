@@ -1,51 +1,3 @@
-#from flask import render_template
-#from flaskexample import app
-
-#@app.route('/')
-#@app.route('/index')
-#def index():
-#   user = { 'nickname': 'Miguel' } # fake user
-#   return render_template("index.html",
-#       title = 'Home',
-#       user = user)
-
-#from flask import render_template
-#from flaskexample import app
-#from sqlalchemy import create_engine
-#from sqlalchemy_utils import database_exists, create_database
-#import pandas as pd
-#import psycopg2
-
-#username = 'harisk87'           
-#host = 'localhost'
-#dbname = 'birth_db'
-#pswd = '2PsWrD!'
-##db = create_engine('postgres://%s%s/%s'%(user,host,dbname))
-#db = create_engine('postgresql://%s:%s@localhost/%s'%(username,pswd,dbname))
-#con = None
-##con = psycopg2.connect(database = dbname, user = user)
-#con = psycopg2.connect(database = dbname, user = username, host='localhost', password=pswd)
-
-
-#@app.route('/')
-#@app.route('/index')
-#def index():
-#    return render_template("index.html",
-#       title = 'Home', user = { 'nickname': 'Miguel' },
-#       )
-
-#@app.route('/db')
-#def birth_page():
-#    sql_query = """                                                                       
-#                SELECT * FROM birth_data_table WHERE delivery_method='Cesarean';          
-#                """
-#    query_results = pd.read_sql_query(sql_query,con)
-#    births = ""
-#    for i in range(0,10):
-#        births += query_results.iloc[i]['birth_month']
-#        births += "<br>"
-#    return births
-
 from flask import render_template
 from flask import request
 from flaskexample import app
@@ -54,71 +6,86 @@ from sqlalchemy_utils import database_exists, create_database
 from a_Model import ModelIt
 import pandas as pd
 import psycopg2
+import pickle
+from sklearn.metrics.pairwise import cosine_similarity
+from scipy import sparse
 
-username = 'harisk87'           
+
+
+username = 'harisk87'
 host = 'localhost'
-#dbname = 'birth_db' CHANGE 1: CHANGED birth_db to rest_db
 dbname = 'rest_db'
 pswd = '2PsWrD!'
 db = create_engine('postgresql://%s:%s@localhost/%s'%(username,pswd,dbname))
 con = None
 con = psycopg2.connect(database = dbname, user = username, host='localhost', password=pswd)
 
-#@app.route('/')
-#@app.route('/index')
-#def index():
-#    return render_template("index.html",
-#       title = 'Home', user = { 'nickname': 'Miguel' },
-#       )
-
-#@app.route('/db')
-#@app.route('/db')
-# #CHANGE 2: CHANGED birth_page to rest_page
-#def birth_page():
-#    sql_query = """                                                                       
-#                SELECT * FROM birth_data_table WHERE delivery_method='Cesarean';          
-#                """
-#    query_results = pd.read_sql_query(sql_query,con)
-#    births = ""
-#    for i in range(0,10):
-#        births += query_results.iloc[i]['birth_month']
-#        births += "<br>"
-#    return births
-
-#@app.route('/db_fancy')
-#def cesareans_page_fancy():
-#    sql_query = """
-#               SELECT index, attendant, birth_month FROM birth_data_table WHERE delivery_method='Cesarean';
-#                """
-#    query_results=pd.read_sql_query(sql_query,con)
-#    births = []
-#    for i in range(0,query_results.shape[0]):
-#        births.append(dict(index=query_results.iloc[i]['index'], attendant=query_results.iloc[i]['attendant'], birth_month=query_results.iloc[i]['birth_month']))
-#    return render_template('cesareans.html',births=births)
-
 @app.route('/input')
-def cesareans_input():
-    return render_template("input.html")
+def rest_input():
+    return render_template("input.html") #SENDS THE BROWSER RESULTS
 
-@app.route('/output')
-def cesareans_output():
+@app.route('/output') #DECORATER
+def rest_output():
   #pull 'menu_item' from input field and store it
-  food = request.args.get('menu_item')
+  rest_name = request.args.get('rest_name')
+  menu_item = request.args.get('menu_item')
+
+  pd_rest_table = pd.read_pickle('all_amrests_df')
+
+  idx = pd_rest_table[(pd_rest_table['Restaurant Name'] == rest_name) & (pd_rest_table['Menu Item'] == menu_item)].index.values[0]
+
+  tf_idf_mat = pickle.load( open( 'tfidfmat.pickle', "rb" ) )
+  cosine_similarities = cosine_similarity(tf_idf_mat[idx], tf_idf_mat).flatten()
+
+  related_food_idcs = cosine_similarities.argsort()[::-1][1:11]
+  print related_food_idcs
+
+  rests = []
+  for i in related_food_idcs:
+  	menu_print = pd_rest_table.iloc[i]['Menu Item']
+	desc_print = pd_rest_table.iloc[i]['Item Description']
+	name_print = pd_rest_table.iloc[i]['Restaurant Name']
+	price_print = pd_rest_table.iloc[i]['Price']
+  	rests.append(dict(menu_item=menu_print, desc=desc_print, name=name_print, price=price_print) )
+
+  print rests
+  return render_template("output.html",rests=rests,rest_name = rest_name, menu_item = menu_item)
+
+
+#
+#	#Load the tf-idf matrix for the stored food
+#	with open('tfidfmat.pickle') as f:  # Python 3: open(..., 'rb')
+#  		tfidfmat = pickle.load(f)
+#
+#	#Get
+
+
+
+
     #just select the Cesareans  from the birth dtabase for the month that the user inputs
   #query = "SELECT index, attendant, birth_month FROM birth_data_table WHERE delivery_method='Cesarean' AND birth_month='%s'" % food
-  query = """ SELECT * FROM rest_table """
-  print query
-  query_results=pd.read_sql_query(query,con)
-  print query_results
-  rests = []
-  for i in range(0,query_results.shape[0]):
-       rests.append(dict(index=query_results.iloc[i]['index'], menu_item=query_results.iloc[i]['Menu Item'], desc=query_results.iloc[i]['Item Description'], name = query_results.iloc[i]['Restaurant Name'], price = query_results.iloc[i]['Price']) )
-  the_result = ModelIt(food,rests)
-  return render_template("output.html", rests = rests, the_result = the_result)
-#  births = []
-#  for i in range(0,query_results.shape[0]):
-#      births.append(dict(index=query_results.iloc[i]['index'], attendant=query_results.iloc[i]['attendant'], birth_month=query_results.iloc[i]['birth_month']))
-#  the_result = ModelIt(patient,births)
-#  return render_template("output.html", births = births, the_result = the_result)
+#  query = """ SELECT * FROM rest_table"""
+#  print query
+#  query_results=pd.read_sql_query(query,con)
+#  print query_results
+#  rests = []
+#  for i in range(300,350):#query_results.shape[0]
+#	menu_print = query_results.iloc[i]['Menu Item']
+#	desc_print = query_results.iloc[i]['Item Description']
+#	name_print = query_results.iloc[i]['Restaurant Name']
+#	price_print = query_results.iloc[i]['Price']
 
+##	menu_print = encoding_hack(menu_print)
+##	desc_print = encoding_hack(desc_print)
+##	name_print = encoding_hack(name_print)
+##	price_print = encoding_hack(price_print)
 
+#    	rests.append(dict(menu_item=menu_print, desc=desc_print, name=name_print, price=price_print) )
+
+#  the_result = 0
+  #, rests = rests, the_result = the_result)
+
+#def encoding_hack(text):
+#	text_int = text.encode("utf-8")
+#	out_text = text_int.decode("utf-8").encode('ascii','ignore')
+#	return out_text

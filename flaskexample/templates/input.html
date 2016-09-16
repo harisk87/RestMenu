@@ -49,28 +49,57 @@
         <p>Hari Sivakumar</p>
     </div>
 
-    <div class = "container">
+
 
 <!--      <form  action="/output" method="GET">-->
 <!--        <div class="form-group">-->
 <!--          <label for="birth_month">Birth Month:</label>-->
 <!--          <input type="text" id="birth_month" name='birth_month' placeholder="e.g. ">-->
-<!--        </div>--> CHANGE birth_month to menu_item
+<!--<!--       </div>--> 
+    <div class = "container">
 	<form  action="/output" method="GET">
         <div class="form-group">
-          <label for="menu_item">Menu Item:</label>
-          <input type="text" id="menu_item" name='menu_item' placeholder="e.g. ">
+          <label for="rest_name">Restaurant Name:</label>
+          <input type="text" id="rest_name" name='rest_name' value="Delancey Street">
         </div>
-
-        <div>
+	<div class="form-group">
+          <label for="menu_item">Menu Item:</label>
+          <input type="text" id="menu_item" name="menu_item" value="Filet Of Smoked Trout">
+        </div>
+       <div>
           <button type="submit" class="btn btn-default btn-lg">Find My Grub!</button>
         </div>
+</form></div>
 
-      </form>
+        
+<!--<div class="container">-->
+<!--  <h2>Find My Grub</h2>-->
+<!--  <p>What are you craving?</p>-->
+<!--  <div class="dropdown">-->
+<!--    <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Restaurant-->
+<!--    <span class="caret"></span></button>-->
+<!--    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">-->
+<!--	{% for rest in rest_name %}-->
+<!-- 	 <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{rest}}</a></li>-->
+<!--	{% endfor %}-->
+<!--      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>-->
+<!--      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>-->
+<!--      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>-->
+<!--      <li role="presentation" class="divider"></li>-->
+<!--      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>-->
+<!--      {% for user in users %}-->
+<!--  	<li><a href="{{ user.url }}">{{ user.username }}</a></li>-->
+<!--      {% endfor %}-->
+<!--    </ul>-->
+<!--  </div>-->
+<!--</div>-->
+
     </div>
 
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="static/js/bootstrap.min.js"></script>
+<!--    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>-->
+<!--    <script src="static/js/bootstrap.min.js"></script>-->
+<!--    <script src="static/js/dropdown.js"></script>-->
+
 
   </div> <!-- /.container-->
 
@@ -84,6 +113,8 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
     <script src="static/js/bootstrap.min.js"></script>
+<!--    <script src="static/js/dropdown.js"></script>-->
+
 
   </body>
 </html>
