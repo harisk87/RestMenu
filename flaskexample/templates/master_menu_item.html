@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>LiveBeat{% block title %}{% endblock %}</title>
+        <title>Find My Grub{% block title %}{% endblock %}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -16,14 +16,22 @@
     </head>
     <body>
         <header>
-            <h1>Your Title</h1>
+            <h1>Find My Grub</h1>
         </header>
 
         {% block content %}
-        <form method="get" action="/go">
-            <input type="text" name="query" placeholder="Placeholder text">
+        <form method="post" action="/result">
+            <select name="menu_item">
+                {% for menu_item in menu_item_list %}
+                <option value="{{menu_item}}">{{menu_item}}</option>
+                <!--             what i need    what user see     -->
+                {% endfor %}
+            </select>
+            <input type="hidden" name="rest_name" value="{{rest_name}}">
+            <!-- Hidden input to be sent to the next page -->
             <button type="submit" name="push">Submit</button>
         </form>
+
         {% endblock %}
 
         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
