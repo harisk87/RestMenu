@@ -1,0 +1,45 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Find My Grub{% block title %}{% endblock %}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" href="/static/css/normalize.css">
+        <link rel="stylesheet" href="/static/css/main.css">
+        <script src="/static/js/vendor/modernizr-2.8.3.min.js"></script>
+    </head>
+    <body>
+        <header>
+            <h1>Find My Grub</h1>
+        </header>
+
+        {% block content %}
+        <form method="post" action="/mid_page">
+            <select name="rest_name">
+                {% for rest_name in rest_name_list %}
+                <option value="{{rest_name}}">{{rest_name}}</option>
+                <!--             what i need    what user see     -->
+                <!-- value="{{rest_name}}">{{rest_name}} -->
+                <!-- The first {{rest_name}} is the actual value of my variable, the second
+                one is what I'm showing the user. This value is then parsed to the variable
+                name = "rest_name" -->
+                {% endfor %}
+            </select>
+            <button type="submit" name="push">Submit</button>
+        </form>
+
+        {% endblock %}
+
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
+        <script src="/static/js/plugins.js"></script>
+        <script src="/static/js/main.js"></script>
+
+    </body>
+</html>
