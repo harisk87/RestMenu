@@ -1,0 +1,1 @@
+ssh -i ~/Documents/DS/Insight/Project/AWS/Insight2016C.pem ubuntu@54.68.35.65

@@ -1,0 +1,2 @@
+scp -i ~/Documents/DS/Insight/Project/AWS/Insight2016C.pem -r Website ubuntu@54.68.35.65:
+

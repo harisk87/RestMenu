@@ -1,0 +1,6 @@
+from directory Website
+
+gunicorn flaskexample:app -D
+
+ps ax|grep gunicorn
+sudo pkill gunicorn
